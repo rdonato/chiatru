@@ -109,7 +109,7 @@ impl ImagePuller {
 
         let config = ClientConfig {
             protocol: if is_localhost {
-                ClientProtocol::Https
+                ClientProtocol::Http
             } else {
                 ClientProtocol::Https
             },
