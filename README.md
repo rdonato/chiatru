@@ -43,7 +43,7 @@ Subprocess:   oc (cluster queries), grype (scanning), aws (ECR auth)
 ## Build
 
 ```bash
-cd rosa-vuln-scan
+cd chiatru
 cargo build --release
 ```
 
