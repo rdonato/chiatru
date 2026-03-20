@@ -1,4 +1,4 @@
-use anyhow::{Context, Result, bail};
+use anyhow::{bail, Context, Result};
 use std::path::Path;
 use std::process::Command;
 use tracing::{debug, warn};
@@ -33,7 +33,11 @@ pub fn scan_tar(tar_path: &Path, image_name: &str) -> Result<ScanResult> {
         if output.stdout.is_empty() {
             bail!("grype scan failed for {}: {}", image_name, stderr.trim());
         }
-        warn!("grype reported warnings for {}: {}", image_name, stderr.trim());
+        warn!(
+            "grype reported warnings for {}: {}",
+            image_name,
+            stderr.trim()
+        );
     }
 
     let json_str = String::from_utf8_lossy(&output.stdout);
