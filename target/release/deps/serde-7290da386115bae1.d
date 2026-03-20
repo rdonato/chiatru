@@ -1,0 +1,14 @@
+/Users/rdonato/Documents/RUST/rosa-vuln-scan/target/release/deps/serde-7290da386115bae1.d: /Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/rdonato/Documents/RUST/rosa-vuln-scan/target/release/build/serde-6d320455a298b679/out/private.rs
+
+/Users/rdonato/Documents/RUST/rosa-vuln-scan/target/release/deps/libserde-7290da386115bae1.rlib: /Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/rdonato/Documents/RUST/rosa-vuln-scan/target/release/build/serde-6d320455a298b679/out/private.rs
+
+/Users/rdonato/Documents/RUST/rosa-vuln-scan/target/release/deps/libserde-7290da386115bae1.rmeta: /Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/rdonato/Documents/RUST/rosa-vuln-scan/target/release/build/serde-6d320455a298b679/out/private.rs
+
+/Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/Users/rdonato/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/Users/rdonato/Documents/RUST/rosa-vuln-scan/target/release/build/serde-6d320455a298b679/out/private.rs:
+
+# env-dep:OUT_DIR=/Users/rdonato/Documents/RUST/rosa-vuln-scan/target/release/build/serde-6d320455a298b679/out

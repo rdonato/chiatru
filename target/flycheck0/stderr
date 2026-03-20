@@ -1,54 +1,12 @@
-   0.151112375s  INFO prepare_target{force=false package_id=chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan) target="chiatru"}: cargo::core::compiler::fingerprint: fingerprint error for chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan)/Check { test: false }/TargetInner { name: "chiatru", doc: true, ..: with_path("/Users/rdonato/Documents/RUST/rosa-vuln-scan/src/main.rs", Edition2021) }
-   0.151240292s  INFO prepare_target{force=false package_id=chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan) target="chiatru"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/rdonato/Documents/RUST/rosa-vuln-scan/target/debug/.fingerprint/chiatru-4bf352dd9ea37829/bin-chiatru`
-
-Caused by:
-    No such file or directory (os error 2)
-
-Stack backtrace:
-   0: std::backtrace::Backtrace::create
-   1: std::backtrace::Backtrace::capture
-   2: cargo_util::paths::read_bytes
-   3: cargo_util::paths::read
-   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
-   5: cargo::core::compiler::fingerprint::prepare_target
-   6: cargo::core::compiler::compile
-   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
-   8: cargo::ops::cargo_compile::compile_ws
-   9: cargo::ops::cargo_compile::compile_with_exec
-  10: cargo::ops::cargo_compile::compile
-  11: cargo::commands::check::exec
-  12: <cargo::cli::Exec>::exec
-  13: cargo::main
-  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
-  15: std::rt::lang_start::<()>::{closure#0}
-  16: std::rt::lang_start_internal
-  17: _main
-   0.167051292s  INFO prepare_target{force=false package_id=chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan) target="chiatru"}: cargo::core::compiler::fingerprint: fingerprint error for chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan)/Check { test: true }/TargetInner { name: "chiatru", doc: true, ..: with_path("/Users/rdonato/Documents/RUST/rosa-vuln-scan/src/main.rs", Edition2021) }
-   0.167068834s  INFO prepare_target{force=false package_id=chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan) target="chiatru"}: cargo::core::compiler::fingerprint:     err: failed to read `/Users/rdonato/Documents/RUST/rosa-vuln-scan/target/debug/.fingerprint/chiatru-a9455e5359e4ff31/test-bin-chiatru`
-
-Caused by:
-    No such file or directory (os error 2)
-
-Stack backtrace:
-   0: std::backtrace::Backtrace::create
-   1: std::backtrace::Backtrace::capture
-   2: cargo_util::paths::read_bytes
-   3: cargo_util::paths::read
-   4: cargo::core::compiler::fingerprint::_compare_old_fingerprint
-   5: cargo::core::compiler::fingerprint::prepare_target
-   6: cargo::core::compiler::compile
-   7: <cargo::core::compiler::build_runner::BuildRunner>::compile
-   8: cargo::ops::cargo_compile::compile_ws
-   9: cargo::ops::cargo_compile::compile_with_exec
-  10: cargo::ops::cargo_compile::compile
-  11: cargo::commands::check::exec
-  12: <cargo::cli::Exec>::exec
-  13: cargo::main
-  14: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
-  15: std::rt::lang_start::<()>::{closure#0}
-  16: std::rt::lang_start_internal
-  17: _main
+   0.117651083s  INFO prepare_target{force=false package_id=chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan) target="chiatru"}: cargo::core::compiler::fingerprint: stale: changed "/Users/rdonato/Documents/RUST/rosa-vuln-scan/src/registry.rs"
+   0.117730375s  INFO prepare_target{force=false package_id=chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan) target="chiatru"}: cargo::core::compiler::fingerprint:           (vs) "/Users/rdonato/Documents/RUST/rosa-vuln-scan/target/debug/.fingerprint/chiatru-4d502719be69cced/dep-bin-chiatru"
+   0.117735667s  INFO prepare_target{force=false package_id=chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan) target="chiatru"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 1774026124, nanos: 670018181 } < FileTime { seconds: 1774026126, nanos: 54343355 }
+   0.119324167s  INFO prepare_target{force=false package_id=chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan) target="chiatru"}: cargo::core::compiler::fingerprint: fingerprint dirty for chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan)/Check { test: false }/TargetInner { name: "chiatru", doc: true, ..: with_path("/Users/rdonato/Documents/RUST/rosa-vuln-scan/src/main.rs", Edition2021) }
+   0.119367083s  INFO prepare_target{force=false package_id=chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan) target="chiatru"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "/Users/rdonato/Documents/RUST/rosa-vuln-scan/target/debug/.fingerprint/chiatru-4d502719be69cced/dep-bin-chiatru", reference_mtime: FileTime { seconds: 1774026124, nanos: 670018181 }, stale: "/Users/rdonato/Documents/RUST/rosa-vuln-scan/src/registry.rs", stale_mtime: FileTime { seconds: 1774026126, nanos: 54343355 } }))
+   0.130904917s  INFO prepare_target{force=false package_id=chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan) target="chiatru"}: cargo::core::compiler::fingerprint: stale: changed "/Users/rdonato/Documents/RUST/rosa-vuln-scan/src/registry.rs"
+   0.130913500s  INFO prepare_target{force=false package_id=chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan) target="chiatru"}: cargo::core::compiler::fingerprint:           (vs) "/Users/rdonato/Documents/RUST/rosa-vuln-scan/target/debug/.fingerprint/chiatru-72e0b79fc2345d36/dep-test-bin-chiatru"
+   0.130916083s  INFO prepare_target{force=false package_id=chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan) target="chiatru"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 1774026124, nanos: 669979764 } < FileTime { seconds: 1774026126, nanos: 54343355 }
+   0.130975542s  INFO prepare_target{force=false package_id=chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan) target="chiatru"}: cargo::core::compiler::fingerprint: fingerprint dirty for chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan)/Check { test: true }/TargetInner { name: "chiatru", doc: true, ..: with_path("/Users/rdonato/Documents/RUST/rosa-vuln-scan/src/main.rs", Edition2021) }
+   0.130986250s  INFO prepare_target{force=false package_id=chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan) target="chiatru"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "/Users/rdonato/Documents/RUST/rosa-vuln-scan/target/debug/.fingerprint/chiatru-72e0b79fc2345d36/dep-test-bin-chiatru", reference_mtime: FileTime { seconds: 1774026124, nanos: 669979764 }, stale: "/Users/rdonato/Documents/RUST/rosa-vuln-scan/src/registry.rs", stale_mtime: FileTime { seconds: 1774026126, nanos: 54343355 } }))
     Checking chiatru v0.1.0 (/Users/rdonato/Documents/RUST/rosa-vuln-scan)
-error: could not compile `chiatru` (bin "chiatru") due to 2 previous errors; 3 warnings emitted
-warning: build failed, waiting for other jobs to finish...
-error: could not compile `chiatru` (bin "chiatru" test) due to 2 previous errors; 3 warnings emitted
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.00s
