@@ -1,4 +1,4 @@
-use anyhow::{Context, Result, bail};
+use anyhow::{bail, Context, Result};
 use flate2::read::GzDecoder;
 use oci_distribution::client::{ClientConfig, ClientProtocol};
 use oci_distribution::secrets::RegistryAuth;
@@ -141,11 +141,7 @@ impl ImagePuller {
 
         // Pull manifest and layers
         let image_data = client
-            .pull(
-                &reference,
-                &auth,
-                ACCEPTED_MEDIA_TYPES.to_vec(),
-            )
+            .pull(&reference, &auth, ACCEPTED_MEDIA_TYPES.to_vec())
             .await
             .with_context(|| format!("Failed to pull image: {}", pull_ref))?;
 
@@ -153,9 +149,7 @@ impl ImagePuller {
         let tar_path = output_dir.join("current-image.tar");
         save_docker_archive(&tar_path, &reference, &image_data)?;
 
-        let size = std::fs::metadata(&tar_path)
-            .map(|m| m.len())
-            .unwrap_or(0);
+        let size = std::fs::metadata(&tar_path).map(|m| m.len()).unwrap_or(0);
 
         Ok((tar_path, size))
     }

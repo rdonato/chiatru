@@ -50,7 +50,10 @@ pub fn build_csv_report(
 
     let mut summary = ReportSummary {
         total_pod_images: pod_images.len(),
-        _images_scanned: scan_results.values().filter(|r| !r.vulnerabilities.is_empty() || scan_results.contains_key(&r.image)).count(),
+        _images_scanned: scan_results
+            .values()
+            .filter(|r| !r.vulnerabilities.is_empty() || scan_results.contains_key(&r.image))
+            .count(),
         ..Default::default()
     };
 

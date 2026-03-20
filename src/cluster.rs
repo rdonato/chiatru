@@ -1,4 +1,4 @@
-use anyhow::{Context, Result, bail};
+use anyhow::{bail, Context, Result};
 use regex::Regex;
 use std::collections::HashSet;
 use std::process::Command;
@@ -7,17 +7,11 @@ use tracing::{info, warn};
 use crate::types::PodImage;
 
 /// System namespace patterns to exclude
-const SYSTEM_NS_PREFIXES: &[&str] = &[
-    "openshift-",
-    "kube-",
-    "redhat-",
-    "rosa-",
-];
+const SYSTEM_NS_PREFIXES: &[&str] = &["openshift-", "kube-", "redhat-", "rosa-"];
 const SYSTEM_NS_EXACT: &[&str] = &["default"];
 
 fn is_system_namespace(ns: &str) -> bool {
-    SYSTEM_NS_EXACT.contains(&ns)
-        || SYSTEM_NS_PREFIXES.iter().any(|p| ns.starts_with(p))
+    SYSTEM_NS_EXACT.contains(&ns) || SYSTEM_NS_PREFIXES.iter().any(|p| ns.starts_with(p))
 }
 
 /// Run an oc command and return stdout
@@ -66,7 +60,14 @@ pub fn get_pod_images(namespaces: Option<&[String]>) -> Result<Vec<PodImage>> {
             let mut all_output = String::new();
             for ns in ns_list {
                 info!("Querying namespace: {}", ns);
-                match run_oc(&["get", "pods", "-n", ns, "-o", &format!("jsonpath={}", jsonpath)]) {
+                match run_oc(&[
+                    "get",
+                    "pods",
+                    "-n",
+                    ns,
+                    "-o",
+                    &format!("jsonpath={}", jsonpath),
+                ]) {
                     Ok(output) => {
                         all_output.push_str(&output);
                         all_output.push('\n');
@@ -78,7 +79,13 @@ pub fn get_pod_images(namespaces: Option<&[String]>) -> Result<Vec<PodImage>> {
         }
         None => {
             info!("Querying all namespaces...");
-            run_oc(&["get", "pods", "--all-namespaces", "-o", &format!("jsonpath={}", jsonpath)])?
+            run_oc(&[
+                "get",
+                "pods",
+                "--all-namespaces",
+                "-o",
+                &format!("jsonpath={}", jsonpath),
+            ])?
         }
     };
 
