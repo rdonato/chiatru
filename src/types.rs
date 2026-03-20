@@ -170,7 +170,7 @@ pub struct CsvRow {
 // ---------------------------------------------------------------------------
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum RegistryKind {
+pub enum _RegistryKind {
     /// Internal OpenShift image registry (needs port-forward + OCP token)
     Internal,
     /// AWS ECR (needs aws ecr get-login-password)

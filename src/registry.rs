@@ -137,7 +137,7 @@ impl ImagePuller {
             .with_context(|| format!("Invalid image reference: {}", pull_ref))?;
 
         let auth = self.get_auth(&pull_ref);
-        let mut client = Self::build_client(&pull_ref);
+        let client = Self::build_client(&pull_ref);
 
         // Pull manifest and layers
         let image_data = client
@@ -172,7 +172,6 @@ fn save_docker_archive(
     reference: &Reference,
     image_data: &oci_distribution::client::ImageData,
 ) -> Result<()> {
-    use std::io::Write;
     use tar::Builder;
 
     let file = std::fs::File::create(tar_path)
