@@ -144,10 +144,7 @@ impl ImagePuller {
             .pull(
                 &reference,
                 &auth,
-                ACCEPTED_MEDIA_TYPES
-                    .iter()
-                    .map(|s| s.to_string())
-                    .collect(),
+                ACCEPTED_MEDIA_TYPES.to_vec(),
             )
             .await
             .with_context(|| format!("Failed to pull image: {}", pull_ref))?;
@@ -176,7 +173,7 @@ fn save_docker_archive(
     image_data: &oci_distribution::client::ImageData,
 ) -> Result<()> {
     use std::io::Write;
-    use tar::{Builder, Header};
+    use tar::Builder;
 
     let file = std::fs::File::create(tar_path)
         .with_context(|| format!("Failed to create tar file: {}", tar_path.display()))?;
@@ -252,7 +249,6 @@ fn try_decompress_gzip(data: &[u8]) -> Vec<u8> {
 
 /// Compute SHA256 hex digest of data
 fn sha256_hex(data: &[u8]) -> String {
-    use std::io::Write;
     // Simple SHA-256 using the fact that we already have the data
     // We use a basic implementation to avoid pulling in another crate
     // In production, you'd use `sha2` crate
