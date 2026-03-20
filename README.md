@@ -80,7 +80,7 @@ You can also trigger a build manually from the GitHub Actions tab without creati
 ./target/release/chiatru --dry-run
 
 # Scan all non-system namespaces
-./target/release/chiatru --sleep 10 --output alpitour-vuln-report.csv
+./target/release/chiatru --sleep 10 --output company-vuln-report.csv
 
 # Scan specific namespaces
 ./target/release/chiatru --namespace sos-dev,b2x-prod --output targeted-report.csv
