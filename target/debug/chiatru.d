@@ -1,0 +1,1 @@
+/Users/rdonato/Documents/RUST/chiatru/target/debug/chiatru: /Users/rdonato/Documents/RUST/chiatru/src/cluster.rs /Users/rdonato/Documents/RUST/chiatru/src/main.rs /Users/rdonato/Documents/RUST/chiatru/src/registry.rs /Users/rdonato/Documents/RUST/chiatru/src/report.rs /Users/rdonato/Documents/RUST/chiatru/src/scanner.rs /Users/rdonato/Documents/RUST/chiatru/src/types.rs
