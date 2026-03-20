@@ -1,5 +1,5 @@
 [package]
-name = "rosa-vuln-scan"
+name = "chiatru"
 version = "0.1.0"
 edition = "2021"
 description = "ROSA cluster image vulnerability scanner using native OCI pulling + grype"

@@ -1,4 +1,4 @@
-# ROSA Image Vulnerability Scanner (Rust)
+# Chiatru - ROSA Image Vulnerability Scanner (Rust)
 
 A native Rust CLI tool that scans all container images running in ROSA non-system namespaces for vulnerabilities. Uses **oci-distribution** for native image pulling (replacing skopeo) and **grype** as a subprocess for vulnerability scanning.
 
@@ -6,7 +6,7 @@ A native Rust CLI tool that scans all container images running in ROSA non-syste
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│              rosa-vuln-scan (Rust)                  │
+│                   chiatru (Rust)                    │
 │                                                     │
 │  ┌──────────────┐  ┌──────────────┐  ┌───────────┐  │
 │  │ cluster.rs   │  │ registry.rs  │  │scanner.rs │  │
@@ -47,25 +47,49 @@ cd rosa-vuln-scan
 cargo build --release
 ```
 
-The binary will be at `target/release/rosa-vuln-scan`.
+The binary will be at `target/release/chiatru`.
+
+## Releases
+
+This project uses GitHub Actions for automated builds and releases.
+
+### Creating a Release
+
+1. **Tag a version** (replace `1.0.0` with your version):
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+
+2. **GitHub Actions will automatically**:
+   - Build binaries for multiple platforms:
+     - Linux (AMD64, ARM64)
+     - macOS (AMD64, ARM64)
+     - Windows (AMD64)
+   - Create release archives (.tar.gz for Unix, .zip for Windows)
+   - Publish a GitHub release with all binaries
+
+### Manual Trigger
+
+You can also trigger a build manually from the GitHub Actions tab without creating a tag.
 
 ## Usage
 
 ```bash
 # Dry run — list images without scanning
-./target/release/rosa-vuln-scan --dry-run
+./target/release/chiatru --dry-run
 
 # Scan all non-system namespaces
-./target/release/rosa-vuln-scan --sleep 10 --output alpitour-vuln-report.csv
+./target/release/chiatru --sleep 10 --output alpitour-vuln-report.csv
 
 # Scan specific namespaces
-./target/release/rosa-vuln-scan --namespace sos-dev,b2x-prod --output targeted-report.csv
+./target/release/chiatru --namespace sos-dev,b2x-prod --output targeted-report.csv
 
 # Skip automatic ECR login (if already authenticated)
-./target/release/rosa-vuln-scan --skip-ecr-login --output report.csv
+./target/release/chiatru --skip-ecr-login --output report.csv
 
 # Verbose logging
-./target/release/rosa-vuln-scan --log-level debug --output report.csv
+./target/release/chiatru --log-level debug --output report.csv
 ```
 
 ### Options
