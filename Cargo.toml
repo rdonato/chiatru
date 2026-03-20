@@ -6,7 +6,7 @@ description = "ROSA cluster image vulnerability scanner using native OCI pulling
 
 [dependencies]
 # OCI registry client (native Rust image pulling — replaces skopeo)
-oci-distribution = "0.11"
+oci-distribution = { version = "0.11", default-features = false, features = ["rustls-tls"] }
 
 # Async runtime
 tokio = { version = "1", features = ["full"] }
