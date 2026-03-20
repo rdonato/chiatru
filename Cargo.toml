@@ -1,0 +1,47 @@
+[package]
+name = "rosa-vuln-scan"
+version = "0.1.0"
+edition = "2021"
+description = "ROSA cluster image vulnerability scanner using native OCI pulling + grype"
+
+[dependencies]
+# OCI registry client (native Rust image pulling — replaces skopeo)
+oci-distribution = "0.11"
+
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# CSV report output
+csv = "1"
+
+# Tar archive creation (docker-archive format for grype)
+tar = "0.4"
+flate2 = "1"
+
+# Error handling
+anyhow = "1"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Temp files
+tempfile = "3"
+
+# Timestamps
+chrono = "0.4"
+
+# Regex for registry detection
+regex = "1"
+
+[profile.release]
+opt-level = 3
+lto = true
+strip = true
