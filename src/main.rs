@@ -21,7 +21,7 @@ use crate::types::ScanResult;
 
 #[derive(Parser, Debug)]
 #[command(
-    name = "rosa-vuln-scan",
+    name = "chiatru",
     about = "ROSA cluster image vulnerability scanner",
     long_about = "Scans container images in ROSA non-system namespaces using native OCI \
                   pulling and grype. Outputs a CSV report with namespace, pod, image, \
