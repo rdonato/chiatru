@@ -1,0 +1,5 @@
+# Ignore Cargo target dir
+/target
+
+# Ignore AC-specific environment files
+**/flycheck0
