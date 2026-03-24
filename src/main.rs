@@ -57,6 +57,10 @@ struct Cli {
     /// Log verbosity: info, debug, trace
     #[arg(long, default_value = "info")]
     log_level: String,
+
+    /// Maximum number of retries for oc commands
+    #[arg(long, default_value_t = 5)]
+    max_retries: u32,
 }
 
 fn default_output_filename() -> String {
@@ -88,6 +92,9 @@ async fn main() -> Result<()> {
     info!("Sleep between images: {}s", cli.sleep);
     info!("Output file: {}", cli.output);
     info!("");
+
+    // Configure oc retry behavior
+    cluster::set_oc_max_retries(cli.max_retries);
 
     // --- Prerequisites ---
     let user = cluster::get_current_user()?;

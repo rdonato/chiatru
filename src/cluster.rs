@@ -2,6 +2,9 @@ use anyhow::{bail, Context, Result};
 use regex::Regex;
 use std::collections::HashSet;
 use std::process::Command;
+use std::sync::atomic::{AtomicU32, Ordering};
+use std::thread;
+use std::time::Duration;
 use tracing::{info, warn};
 
 use crate::types::PodImage;
@@ -10,23 +13,87 @@ use crate::types::PodImage;
 const SYSTEM_NS_PREFIXES: &[&str] = &["openshift-", "kube-", "redhat-", "rosa-"];
 const SYSTEM_NS_EXACT: &[&str] = &["default"];
 
+static MAX_OC_RETRIES: AtomicU32 = AtomicU32::new(5);
+
+/// Configure maximum number of retries for oc commands
+pub fn set_oc_max_retries(max_retries: u32) {
+    MAX_OC_RETRIES.store(max_retries, Ordering::SeqCst);
+}
+
 fn is_system_namespace(ns: &str) -> bool {
     SYSTEM_NS_EXACT.contains(&ns) || SYSTEM_NS_PREFIXES.iter().any(|p| ns.starts_with(p))
 }
 
-/// Run an oc command and return stdout
+/// Run an oc command and return stdout, with retry/backoff on transient failures.
 fn run_oc(args: &[&str]) -> Result<String> {
-    let output = Command::new("oc")
-        .args(args)
-        .output()
-        .context("Failed to execute oc command")?;
+    const BASE_DELAY_MS: u64 = 1000;
+    let max_retries = std::cmp::max(1, MAX_OC_RETRIES.load(Ordering::SeqCst));
 
-    if !output.status.success() {
-        let stderr = String::from_utf8_lossy(&output.stderr);
-        bail!("oc {} failed: {}", args.join(" "), stderr.trim());
+    let mut last_err = None;
+
+    for attempt in 1..=max_retries {
+        let output_result = Command::new("oc").args(args).output();
+
+        match output_result {
+            Ok(output) => {
+                if output.status.success() {
+                    return Ok(String::from_utf8_lossy(&output.stdout).trim().to_string());
+                }
+
+                let stderr = String::from_utf8_lossy(&output.stderr);
+                let message = stderr.trim();
+
+                warn!(
+                    "oc {} failed (attempt {}/{}): {}",
+                    args.join(" "),
+                    attempt,
+                    max_retries,
+                    message
+                );
+
+                if attempt == max_retries {
+                    bail!(
+                        "oc {} failed after {} attempts: {}",
+                        args.join(" "),
+                        max_retries,
+                        message
+                    );
+                }
+
+                if message.contains("Unauthorized")
+                    || message.contains("unable to connect")
+                    || message.contains("connection refused")
+                    || message.contains("TLS handshake")
+                {
+                    warn!("Connection-related issue detected in oc command; please run `oc login` in a separate terminal and retry.");
+                }
+
+                let delay = Duration::from_millis(BASE_DELAY_MS * 2_u64.pow(attempt - 1));
+                info!("Retrying in {:?}...", delay);
+                thread::sleep(delay);
+
+                last_err = Some(anyhow::anyhow!("oc command failed: {}", message));
+            }
+            Err(e) => {
+                warn!(
+                    "Failed to execute oc command on attempt {}/{}: {}",
+                    attempt, max_retries, e
+                );
+
+                if attempt == max_retries {
+                    return Err(e).context("Failed to execute oc command after retries");
+                }
+
+                let delay = Duration::from_millis(BASE_DELAY_MS * 2_u64.pow(attempt - 1));
+                info!("Retrying in {:?}...", delay);
+                thread::sleep(delay);
+
+                last_err = Some(e.into());
+            }
+        }
     }
 
-    Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
+    Err(last_err.unwrap_or_else(|| anyhow::anyhow!("oc command failed without output")))
 }
 
 /// Get current logged-in user
