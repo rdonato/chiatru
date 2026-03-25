@@ -3,3 +3,6 @@
 
 # Ignore AC-specific environment files
 **/flycheck0
+
+#Ignore sfdx directory
+/.sfdx
