@@ -23,12 +23,13 @@ use crate::types::ScanResult;
 #[command(
     name = "chiatru",
     about = "ROSA cluster image vulnerability scanner",
-    long_about = "Scans container images in ROSA non-system namespaces using native OCI \
-                  pulling and grype. Outputs a CSV report with namespace, pod, image, \
-                  and full vulnerability details.\n\n\
+    long_about = "Scans container images in ROSA non-system namespaces using skopeo (non-ECR) \
+                  or native OCI pulling (ECR) and grype. Outputs a CSV report with namespace, \
+                  pod, image, and full vulnerability details.\n\n\
                   Prerequisites:\n  \
                   - oc login active\n  \
                   - grype installed\n  \
+                  - skopeo installed (for non-ECR images)\n  \
                   - aws cli installed (for ECR images)\n  \
                   - Port-forward for internal registry images:\n    \
                     oc port-forward svc/image-registry -n openshift-image-registry 5000:5000"
@@ -102,6 +103,10 @@ async fn main() -> Result<()> {
 
     if let Ok(version) = scanner::check_grype() {
         info!("grype version: {}", version);
+    }
+
+    if let Ok(version) = scanner::check_skopeo() {
+        info!("skopeo version: {}", version);
     }
 
     // --- Phase 1: Collect pod-image mappings ---

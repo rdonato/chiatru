@@ -15,6 +15,16 @@ pub fn check_grype() -> Result<String> {
     Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
 }
 
+/// Check that skopeo is installed and available
+pub fn check_skopeo() -> Result<String> {
+    let output = Command::new("skopeo")
+        .arg("--version")
+        .output()
+        .context("skopeo not found. Install with: brew install skopeo")?;
+
+    Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
+}
+
 /// Scan a docker-archive tar file with grype and return parsed vulnerabilities.
 ///
 /// This invokes `grype <tar_path> -o json` and parses the JSON output.

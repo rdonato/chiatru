@@ -11,6 +11,11 @@ use tracing::{debug, info, warn};
 
 use crate::cluster;
 
+/// Returns true if the image reference points to an ECR registry
+fn is_ecr_image(image: &str) -> bool {
+    image.contains(".dkr.ecr.") && image.contains(".amazonaws.com")
+}
+
 /// Internal OpenShift registry hostname (in-cluster)
 const INTERNAL_REGISTRY: &str = "image-registry.openshift-image-registry.svc:5000";
 /// Rewritten hostname for port-forward access
@@ -127,10 +132,23 @@ impl ImagePuller {
 
     /// Pull an image and save it as a docker-archive tar.
     ///
+    /// ECR images use native OCI pulling; all other images use skopeo.
     /// Returns the path to the created tar file and its size in bytes.
     pub async fn pull_and_save(&self, image: &str, output_dir: &Path) -> Result<(PathBuf, u64)> {
+        if is_ecr_image(image) {
+            self.pull_with_native_oci(image, output_dir).await
+        } else {
+            self.pull_with_skopeo(image, output_dir)
+        }
+    }
+
+    /// Pull an ECR image using native OCI (oci-distribution crate)
+    async fn pull_with_native_oci(&self, image: &str, output_dir: &Path) -> Result<(PathBuf, u64)> {
         let pull_ref = Self::rewrite_reference(image);
-        debug!("Pulling image: {} (as {})", image, pull_ref);
+        debug!(
+            "Pulling ECR image via native OCI: {} (as {})",
+            image, pull_ref
+        );
 
         let reference: Reference = pull_ref
             .parse()
@@ -139,18 +157,51 @@ impl ImagePuller {
         let auth = self.get_auth(&pull_ref);
         let client = Self::build_client(&pull_ref);
 
-        // Pull manifest and layers
         let image_data = client
             .pull(&reference, &auth, ACCEPTED_MEDIA_TYPES.to_vec())
             .await
             .with_context(|| format!("Failed to pull image: {}", pull_ref))?;
 
-        // Save as docker-archive tar
         let tar_path = output_dir.join("current-image.tar");
         save_docker_archive(&tar_path, &reference, &image_data)?;
 
         let size = std::fs::metadata(&tar_path).map(|m| m.len()).unwrap_or(0);
+        Ok((tar_path, size))
+    }
 
+    /// Pull a non-ECR image using skopeo and save as docker-archive tar
+    fn pull_with_skopeo(&self, image: &str, output_dir: &Path) -> Result<(PathBuf, u64)> {
+        let tar_path = output_dir.join("current-image.tar");
+
+        // Rewrite internal registry to localhost for port-forward access
+        let effective_image = Self::rewrite_reference(image);
+        let src = format!("docker://{}", effective_image);
+        let dest = format!("docker-archive:{}", tar_path.display());
+
+        debug!("Pulling image via skopeo: {}", src);
+
+        let mut cmd = Command::new("skopeo");
+        cmd.arg("copy");
+
+        // Internal registry: disable TLS verification and pass OCP credentials
+        if effective_image.starts_with(LOCAL_REGISTRY) {
+            cmd.arg("--src-tls-verify=false");
+            cmd.arg("--src-creds")
+                .arg(format!("{}:{}", self.ocp_user, self.ocp_token));
+        }
+
+        cmd.arg(&src).arg(&dest);
+
+        let output = cmd
+            .output()
+            .context("Failed to run skopeo. Is skopeo installed?")?;
+
+        if !output.status.success() {
+            let stderr = String::from_utf8_lossy(&output.stderr);
+            bail!("skopeo failed for {}: {}", image, stderr.trim());
+        }
+
+        let size = std::fs::metadata(&tar_path).map(|m| m.len()).unwrap_or(0);
         Ok((tar_path, size))
     }
 }
