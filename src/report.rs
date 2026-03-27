@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::path::Path;
 use tracing::info;
 
@@ -130,4 +130,54 @@ pub fn build_csv_report(
     writer.flush()?;
 
     Ok(summary)
+}
+
+/// Build a CSV report of images that could not be scanned.
+///
+/// Each row contains the failed image and a semicolon-separated list of
+/// namespaces that reference it. Returns the number of failed images written.
+pub fn build_error_csv_report(
+    output_path: &Path,
+    pod_images: &[PodImage],
+    scan_results: &HashMap<String, ScanResult>,
+) -> Result<usize> {
+    // Collect namespaces per failed image, preserving insertion order
+    let mut failed: HashMap<&str, Vec<&str>> = HashMap::new();
+    let mut seen_ns: HashMap<&str, HashSet<&str>> = HashMap::new();
+
+    for pi in pod_images {
+        if !scan_results.contains_key(&pi.image) {
+            let ns_set = seen_ns.entry(pi.image.as_str()).or_default();
+            if ns_set.insert(pi.namespace.as_str()) {
+                failed
+                    .entry(pi.image.as_str())
+                    .or_default()
+                    .push(pi.namespace.as_str());
+            }
+        }
+    }
+
+    let count = failed.len();
+    if count == 0 {
+        return Ok(0);
+    }
+
+    info!("Building error CSV report: {}", output_path.display());
+
+    let mut writer = csv::Writer::from_path(output_path)
+        .with_context(|| format!("Failed to create error CSV: {}", output_path.display()))?;
+
+    writer.write_record(["Image", "Namespaces"])?;
+
+    let mut rows: Vec<(&str, Vec<&str>)> = failed.into_iter().collect();
+    rows.sort_by_key(|(img, _)| *img);
+
+    for (image, mut namespaces) in rows {
+        namespaces.sort_unstable();
+        writer.write_record([image, &namespaces.join(";")])?;
+    }
+
+    writer.flush()?;
+
+    Ok(count)
 }

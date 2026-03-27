@@ -232,6 +232,18 @@ async fn main() -> Result<()> {
     let output_path = PathBuf::from(&cli.output);
     let summary = report::build_csv_report(&output_path, &pod_images, &scan_results)?;
 
+    // --- Phase 4: Build error report (failed images only) ---
+    let error_filename = format!(
+        "chiatru_errors_{}.csv",
+        Local::now().format("%Y%m%d-%H%M%S")
+    );
+    let error_path = PathBuf::from(&error_filename);
+    match report::build_error_csv_report(&error_path, &pod_images, &scan_results) {
+        Ok(0) => info!("No scan failures — error report not written"),
+        Ok(n) => info!("Error report: {} ({} failed images)", error_filename, n),
+        Err(e) => error!("Failed to write error report: {}", e),
+    }
+
     info!("==========================================");
     info!("REPORT SUMMARY");
     info!("==========================================");
